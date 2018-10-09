@@ -1,0 +1,295 @@
+<!doctype html>
+{% load staticfiles %}
+<html lang="us">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	<title>查詢頁面</title>
+	<link href="{% static "js/jquery-ui.css" %}" rel="stylesheet">
+	<style>
+	body{
+		font-family: "Trebuchet MS", sans-serif;
+		margin: 50px;
+	}
+	.demoHeaders {
+		margin-top: 2em;
+	}
+	#dialog-link {
+		padding: .4em 1em .4em 20px;
+		text-decoration: none;
+		position: relative;
+	}
+	#dialog-link span.ui-icon {
+		margin: 0 5px 0 0;
+		position: absolute;
+		left: .2em;
+		top: 50%;
+		margin-top: -8px;
+	}
+	#icons {
+		margin: 0;
+		padding: 0;
+	}
+	#icons li {
+		margin: 2px;
+		position: relative;
+		padding: 4px 0;
+		cursor: pointer;
+		float: left;
+		list-style: none;
+	}
+	#icons span.ui-icon {
+		float: left;
+		margin: 0 4px;
+	}
+	.fakewindowcontain .ui-widget-overlay {
+		position: absolute;
+	}
+	select {
+		width: 200px;
+	}
+    </style>
+    
+    <style>
+        a{
+            text-decoration: none;
+            color:grey;
+        }
+        a:hover{
+            color: red;
+        }
+        table{
+            width: 150%;
+            height: 180px;
+            border-collapse: collapse;
+            padding:10px 5px;
+            text-align: center;
+            border-color: white;
+            font-family:"黑体";
+        }
+    </style>
+
+
+
+</head>
+<body>
+        <div class="container">
+                <div class="row">
+                <div class="col-sm-1">
+                        <button type="button" class="btn btn-outline-dark">查詢</button>
+                </div>
+
+                  <!-- <div class="col-sm">
+                    <div id="datepicker"><p>開始日期：<input type="text" id="datepicker"></p></div>
+                  </div> -->
+
+                  <div class="col-sm-4">
+                    <p>開始日期：<input type="text" id="datepicker"></p>
+                  </div>
+
+                  <div class="col-sm">
+                        <p>結束日期：<input type="text" id="datepickerend"></p>
+                  </div>
+
+
+                  </div>
+                </div>
+              </div>
+              
+              <div class="container" style="margin-top:80px">
+                    <div class="row">
+                      <div class="col-sm-6">
+                            <table border="1px">
+                                <tr>
+                                    <th>事件編號</th>
+                                    <th>事件發生時間</th>
+                                    <th>地點</th>
+                                    <th>車牌號碼</th>
+                                    <th>車顏色</th>
+                                    <th>處理狀態</th>
+                                    <th>操作人員</th>
+                                    <th>修正時間</th>
+                                    <th>修正動作</th>
+                                </tr>
+                                <tr id="tr1">
+                                    <td>1</td>
+                                    <td>王明</td>
+                                    <td>男</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+
+                                </tr>
+                                <tr id="tr2">
+                                    <td>2</td>
+                                    <td>小花</td>
+                                    <td>女</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+
+                                </tr>
+                                <tr id="tr3">
+                                    <td>3</td>
+                                    <td>小明</td>
+                                    <td>男</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+
+                                </tr>
+                                <tr id="tr3">
+                                    <td>3</td>
+                                    <td>小明</td>
+                                    <td>男</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+
+                                </tr>
+                                <tr id="tr3">
+                                    <td>3</td>
+                                    <td>小明</td>
+                                    <td>男</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+
+                                </tr>
+                                <tr id="tr3">
+                                    <td>3</td>
+                                    <td>小明</td>
+                                    <td>男</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    
+                                </tr>
+                                <tr id="tr3">
+                                    <td>3</td>
+                                    <td>小明</td>
+                                    <td>男</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+
+                                </tr>
+                                <tr id="tr3">
+                                    <td>3</td>
+                                    <td>小明</td>
+                                    <td>男</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    
+                                </tr>
+                                <tr id="tr3">
+                                    <td>3</td>
+                                    <td>小明</td>
+                                    <td>男</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    
+                                </tr>
+                                <tr id="tr3">
+                                    <td>3</td>
+                                    <td>小明</td>
+                                    <td>男</td>
+                                    <td>1234568792</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    <td>十三大街</td>
+                                    <td>蓝桥一期</td>
+                                    
+                                </tr>
+                            </table>
+
+
+
+                    </div>
+                  </div>
+
+
+
+
+
+    <!-- Datepicker -->
+
+
+
+
+    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/jquery-ui.js" %}"></script>
+
+
+
+
+
+
+    <script>
+
+    $( "#datepicker" ).datepicker({
+        inline: true
+    });
+
+    $( "#datepickerend" ).datepicker({
+    inline: true
+    });
+
+
+    </script>
+
+    <!-- <script type="text/javascript" src="js/jquery-2.2.3.min.js"></script> -->
+    <script>
+		$("th").css({"background-color":"dimgray","color":"white"});
+		$("tr:odd").css("background-color","#DCDCDC");
+		$("tr:even").css("background-color","whitesmoke");
+		
+		$(".modify").click(function(){
+			$(this).parent().siblings("td").each(function()//找同类元素td
+			{
+				var is_text = $(this).find("input:text");//判断单元格下是否含有文本框
+				if (!is_text.length) {
+					$(this).html("<input size='5' type='text' value=' "+$(this).text()+" ' />");
+				}
+				else
+					$(this).html(is_text.val());
+			})
+		});
+		
+		$(".remove").click(function(){
+			if(window.confirm("您确定要删除数据吗?"))
+			{
+				$(this).parent().parent().remove();
+			}
+		});
+	</script>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  </body>
+</html>

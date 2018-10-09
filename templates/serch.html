@@ -1,0 +1,126 @@
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+<table id="asset_list_table" class="display table  table-hover" data-toggle="table"
+                data-url="{% url 'show_asset_in_table' %}"
+                data-method="get"
+                data-pagination="true"
+                data-side-pagination="server"
+                data-page-list="[10, 20, 50, 100, 200]"
+                data-search="true" data-mobile-responsive="true" searchOnEnterKey="true"
+                data-show-refresh="true" data-show-columns="true"
+                data-show-toggle="true" data-page-size=20 data-unique-id="asset_id"
+                data-striped="true"
+                >
+                <div id="queryResult" class="well" style="width: 91%;">
+                    <table id="order_list"></table>
+                </div>
+              
+
+    <script>
+
+
+        // 查询订单 请求
+$(document).ready(function () {
+    $('#queryOrderBtn').click(function () {
+        if ( !$('#rechargeStartTime').val() || !$('#rechargeEndTime').val() ) {
+            alert('充值时间不能为空！');
+
+        } else {
+            createOrderTable();
+        }
+    })
+});
+
+// 查询订单 返回结果 调用bootstrap-table插件
+function createOrderTable(params) {
+    $('#order_list').bootstrapTable('destroy');  //每次加载前，先销毁原来的表，相当于“刷新”
+     postOrderData = function (params) {
+        var temp = {
+            // limit: params.limit,   //页面大小，后端处理分页时，需要提供
+            // offset: params.offset,  //页码，后端处理分页时，需要提供
+            "zoneID": $('#zoneID').val(),
+            "channelID": $('#channelID').val(),
+            "payType": $('#payType').val()
+        };
+        return temp;
+    };
+
+    $('#order_list').bootstrapTable({
+        url: '/queryOrder',
+        method: 'post',
+        contentType:"application/x-www-form-urlencoded; charset=UTF-8", // 默认是：'application/json'， 不改的话，后台获取不到数据！ ###### 非常重要！！######
+        queryParams: postOrderData,   //查询参数
+        cache: false,   //是否启用 数据缓存
+        pagination: true,  //是都分页
+        sidePageination: 'client',   //谁来分页，客户端：'client'，服务端：'server'
+        pageNumber: 1,   //默认显示 首页
+            pageSize: 20,     //每页需要显示的数据量
+        pageList: [10, 25, 50],  //可供选择的，每页需要显示的数据量
+        height: 420,       //表格高度
+        uniqueId: 'gameorderid',
+        silent: true,    // 刷新服务器数据
+        showExport: true,
+        exportDataType: 'all',
+        // rowStyle: function (row, index) {    //自定义行样式，但是权重 < columns里的样式，貌似也不支持 cellStyle方法
+        //     if (index == $('#order_sum').bootstrapTable('getData').length-1) {
+        //         return {
+        //             css: {
+        //                 "color": "red",
+        //                 "text-align": "center"
+        //             }
+        //         };
+        //     }
+        //     return {};
+        // },
+        columns: [{
+            field: 'gameorderid',
+            title: '游戏订单号',
+            valign: 'middle',
+            align: 'left',
+            halign: 'center'
+        }, {
+            field: 'orderid',
+            title: '渠道订单号',
+            valign: 'middle',
+            align: 'left',
+            halign: 'center'
+        }, {
+            field: 'RegisterTime',
+            title: '注册时间',
+            valign: 'middle',
+            align: 'left',
+            halign: 'center'
+        }, {
+            field: 'AccountId',    //前后端 该字段必须一致！否则，后端传回来的数据，前端无法识别！
+            title: '玩家ID',
+            valign: 'middle',
+            align: 'left',
+            halign: 'center'
+        }],
+        // data: [
+        //     {"AccountId":222},
+        // ]
+        responseHandler: function(res) {   //处理 从后端 返回的数据
+            console.log(res);
+            if (res == 0) {
+                alert('查询出问题！');
+            } else {
+                var orderListData = res['rows'];  //##### 重要！！#####
+                return orderListData;
+            }
+        },
+        onLoadError: function (status) {
+            console.log(status);
+            $('#order_list').bootstrapTable('removeAll');
+        }
+    })
+}
+
+    </script>
+    <script src="https://img.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="/static/js//bootstrap-table.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <!-- Latest compiled and minified Locales -->
+    <script src="/static/js/bootstrap-table-zh-CN.min.js"></script>   
