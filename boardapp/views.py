@@ -193,22 +193,26 @@ import codecs
 import json
 def getjsonq(request):
 	print('111')
-	q=request.POST
+	q=request.POST['data1']
+
 	# json.dumps(q)
-	q=(q.dict())
+	# q=(q.dict())
 	# q = json.dumps(q, sort_keys=True, indent=4, separators=(',', ':'),ensure_ascii=False)
 	# del q['csrfmiddlewaretoken']
-	q = q['data1']
-	q = q[1:-1]
+	# q = q['data1']
+	# q = q[1:-1]
+	result = json.loads(q)
+	js = json.dumps(result, sort_keys=True, indent=4, separators=(',', ':'), ensure_ascii=False)
+	print(result)
 	# q = q.replace("\\" , "")
 	# q = q.strip(' "[]" ')	
-	print(q,type(q))
-	# json_data = json.dumps(q, ensure_ascii=False, indent=4, sort_keys=True) + ','
+	# print(q,type(q))
+	# q = json.dumps(q, ensure_ascii=False, indent=4, sort_keys=True) + ','
 	# print(json_data)
 	# store(json_data)
 
 	fp = codecs.open('output.json', 'a+', 'utf-8')
-	fp.write(q)
+	fp.write(js)
 	fp.close()
 
 # def store(data):
