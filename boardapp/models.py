@@ -24,6 +24,7 @@ class caselist(models.Model):
     vildatetime = models.DateTimeField(auto_now=True)
     vilinf = models.TextField(blank=True, default='')
     situa = models.TextField(blank=True, default='')
+    piclink = models.TextField(blank=True, default='')
     # def __str__(self):
     #     return self.caseNAME
 

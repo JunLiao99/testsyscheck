@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from boardapp import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', views.login),
@@ -34,4 +36,4 @@ urlpatterns = [
     url(r'^delete/(\d+)/(\w+)/$', views.delete),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^admin/', admin.site.urls),
-]
+] + static(settings.STATIC_URL,doucment_root = settings.STATIC_URL)

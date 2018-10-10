@@ -1,17 +1,27 @@
-{% extends "base.html" %}
-{% load staticfiles %}
 
-{% block title %}<title>網站留言版</title>{% endblock %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{% block twomenu %}
-<H1 style="font-size:1cm;">登入帳號: {{ name }} </H1>
-<H1 style="font-size:1cm;">員警姓名: {{ CNname }} </H1>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
- <a style="font-size:1cm;" href="/serch/">歷史資料查詢</a> 
- <a style="margin-left:5%;font-size:1cm;" href="/change/">新進資料處理</a>
+    <!-- <title>Hello, world!</title> -->
+  </head>
+  <body>
+        <H1 style="font-size:1cm;margin-top: 0px">登入帳號: {{ name }} </H1>
+        <H1 style="font-size:1cm;">單位: {{ leader }} </H1>
+        <H1 style="font-size:1cm;">員警編號: {{ expop }} </H1>
+        <H1 style="font-size:1cm;">員警姓名: {{ CNname }} </H1>
+        <a style="font-size:1cm;" href="/serch/" >歷史資料查詢</a> 
+        <a style="font-size:1cm;" href="/change/" >新進資料處理</a>
 
-{% endblock %}
-
-{% block content %}
-
-{% endblock %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -8,12 +8,25 @@ from django.http import HttpResponse
 from . import models
 from .models import check
 import datetime
+import socket
+from ftplib import FTP
+import os
+import time
+
+
+ftp_server='192.168.0.3'
+ftp_user='test_1'
+ftp_password='aa123456'
+ftp_backup_dir='backup'
+
 
 check = models.check()
 
 page = 0  #目前頁面,0為第1頁
 
 def index(request, pageindex=None):  #首頁
+	leader = request.session['leader']
+	expop = request.session['expop']
 	name = request.session['name']
 	CNname = request.session['CNname']
 	global page  #重複開啟本網頁時需保留 page1 的值
@@ -209,12 +222,7 @@ def getjsonq(request):
 
 	vilcnt = 35
 	piccnt = 35
-	# json.dumps(q)
-	# q=(q.dict())
-	# q = json.dumps(q, sort_keys=True, indent=4, separators=(',', ':'),ensure_ascii=False)
-	# del q['csrfmiddlewaretoken']
-	# q = q['data1']
-	# q = q[1:-1]
+
 	result = json.loads(q)
 	print(result)
 
@@ -230,9 +238,58 @@ def getjsonq(request):
 	print(filename)
 
 	js = json.dumps(d, sort_keys=False, indent=4, separators=(',', ':'),ensure_ascii=False)
-	fp = codecs.open(filename, 'a+', 'utf-8')
+	fp = codecs.open("jsonfile/"+filename, 'a+', 'utf-8')
 	fp.write(js)
 	fp.close()
+	time.sleep(3)
+	upload(filename)
+
+	
+
+def upload(name):
+	local_uploadfile="/Users/user/Desktop/company_web/test1/board/jsonfile/"+name
+	sever_will_savefile=name
+	bufsize=1024
+
+
+	socket.setdefaulttimeout(60)  #超時FTP時間設置為60秒
+	ftp = FTP(ftp_server)
+	print("login ftp...")
+	try:
+		ftp.login(ftp_user, ftp_password)
+		print(ftp.getwelcome())  #獲得歡迎信息
+		try:
+			if ftp_backup_dir in ftp.nlst():
+				print("found backup folder in ftp server, upload processing.")
+			else:
+					print("don't found backup folder in ftp server, try to build it.")
+					ftp.mkd(ftp_backup_dir)
+		except:
+			print("the folder" + ftp_backup_dir + "doesn't exits and can't be create!")
+			sys.exit()
+	except:
+		print("ftp login failed.exit.")
+		sys.exit()
+	ftp.cwd(ftp_backup_dir)
+	print("upload data...")
+	try:
+		with open(local_uploadfile,'rb') as  f_up:
+			ftp.storbinary('STOR '+  sever_will_savefile, f_up ,bufsize)
+	except:
+		print("upload failed. check your permission.")
+  
+ 
+	print("ftp upload successful.exit...")
+	ftp.quit()
+    ##發出後刪除資料
+	# q=request.POST['data2']
+	# q=q[1:-1]
+	# q=q.replace('"','')
+	# input1_list=q.split(",")
+	# print(input1_list,type(input1_list))
+	# for i in input1_list:
+	# 	case = models.caselist.objects.get(id=i)
+	# 	case.delete()
 
 def getjsonid(request):
 	q=request.POST['data2']
@@ -243,4 +300,18 @@ def getjsonid(request):
 	for i in input1_list:
 		case = models.caselist.objects.get(id=i)
 		case.delete()
-	# return render(request, 'change.html', context={'messages' : messages})
+
+	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
+	# messages =  models.caselist.objects.filter(situa='未處理').order_by('-id')  #获取全部数据
+	limit = 5
+	paginator = Paginator(messages, limit)  #按每页10条分页
+	page = request.GET.get('page','1')  #默认跳转到第一页
+
+	result = paginator.page(page)
+
+	name = request.session['name']
+	CNname = request.session['CNname']
+	leader = request.session['leader']
+	expop = request.session['expop']
+
+	return render(request, "change.html", {'messages' : result,'name': name,'leader': leader,'CNname': CNname,'expop': expop},locals())
