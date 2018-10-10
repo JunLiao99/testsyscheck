@@ -121,6 +121,19 @@
                             <table border="1px" table id="table01">
                                 <tr>
                                     <th>勾選可開單</th>
+                                    <th>xactno</th>
+                                    <th>plt_no</th>
+                                    <th>car_tp</th>
+                                    <th>vil_dt</th>
+                                    <th>vil_tm</th>
+                                    <th>vil_add</th>
+                                    <th>rule_1</th>
+                                    <th>vilinf</th>
+                                    <th>piccnt</th>
+                                    <th>處理狀態</th>
+                                    <th>車牌圖片</th>
+                                    <th>修正動作</th>
+                                    <!-- <th>勾選可開單</th>
                                     <th>流水號</th>
                                     <th>車號</th>
                                     <th>車別</th>
@@ -131,8 +144,7 @@
                                     <th>中文備註</th>
                                     <th>處理狀態</th>
                                     <th>車牌圖片</th>
-                                    <th>修正動作</th>
-
+                                    <th>修正動作</th> -->
                                 </tr>
                                 <tbody>
                                     {% if messages %}
@@ -148,6 +160,7 @@
                                                 <td>{{ message.rule_1 }}</td>
                                                 <!-- <td>{{ message.vildatetime }}</td> -->
                                                 <td>{{ message.vilinf }}</td>
+                                                <td>1</td>
                                                 <td>{{ message.situa }}</td>
                                                 <!-- <td><a href = "/static/{{ message.piclink }}">1</a></td> -->
                                                 <td><div class="wrap">
@@ -158,7 +171,7 @@
                                         {% endfor %}
                                     {% else %}
                                         <tr>
-                                            <td colspan="4">无数据</td>
+                                            <td colspan="4">目前無數據</td>
                                         </tr>
                                     {% endif %}
 
@@ -234,7 +247,7 @@
 					$(this).html(is_text.val());
 
 			})
-            $(this).parent().siblings("td:eq(9)").each(function()
+            $(this).parent().siblings("td:eq(10)").each(function()
             {
                 $(this).html('已修改')
             })
@@ -325,7 +338,7 @@
             var $table = $('#table01');
             var table = $table.tableToJSON(
                       {
-                         ignoreColumns:[0,9,10], 
+                         ignoreColumns:[0,10,11,12], 
                         //  headings: ['FirstName', 'LastName', 'Score']
                        }); // Convert the table into a javascript object
             console.log('ss')

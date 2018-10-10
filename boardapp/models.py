@@ -13,6 +13,22 @@ class BoardUnit(models.Model):
     def __str__(self):
         return self.bsubject
 
+class history(models.Model):
+    xactno = models.CharField(max_length=200, null=False)
+    pltno = models.CharField(max_length=100, default='m', null=False)
+    car_tp = models.CharField(max_length=100, null=False)
+    vil_dt = models.CharField(max_length=100, null=False)
+    vil_tm = models.EmailField(max_length=100, blank=True, default='')
+    vil_add = models.CharField(max_length=200, blank=True, default='')
+    rule_1 = models.TextField(null=False)
+    vildatetime = models.DateTimeField(auto_now=True)
+    vilinf = models.TextField(blank=True, default='')
+    situa = models.TextField(blank=True, default='')
+    piclink = models.TextField(blank=True, default='')
+    expop = models.CharField(max_length=200, null=False)
+    leader = models.CharField(max_length=100, default='m', null=False)
+
+
 class caselist(models.Model):
     xactno = models.CharField(max_length=200, null=False)
     pltno = models.CharField(max_length=100, default='m', null=False)
@@ -28,18 +44,6 @@ class caselist(models.Model):
     # def __str__(self):
     #     return self.caseNAME
 
-class ourdate(models.Model):
-    usernameQ = models.CharField(max_length=200, null=False)
-    passwordQ = models.CharField(max_length=200, null=False)
-    leader = models.CharField(max_length=200, null=False)
-    exp_dt = models.CharField(max_length=100, default='m', null=False)
-    exp_tm = models.CharField(max_length=100, null=False)
-    exp_op = models.CharField(max_length=100, null=False)
-    vilcnt = models.CharField(max_length=100, blank=True, default='')
-    piccnt = models.CharField(max_length=200, blank=True, default='')
-    vilrec = models.TextField(null=False)
-    # def __str__(self):
-    #     return self.caseNAME
 
 
 class check:
@@ -85,7 +89,20 @@ class check:
         datas = cursor.fetchone()
         return datas
 
+    
+    def insert(self,id):
+        cnxn = pyodbc.connect(r'Driver={SQL Server};Server=.\SQLEXPRESS;Database=testDB;UID=sa;PWD=80689233;')
+        cursor = cnxn.cursor()
+        cursor.execute("INSERT INTO boardapp_history (id, xactno, pltno, car_tp, vil_dt, vil_tm, vil_add, rule_1, vildatetime, vilinf, situa, piclink) SELECT id, xactno, pltno, car_tp, vil_dt, vil_tm, vil_add, rule_1, vildatetime, vilinf, situa, piclink FROM boardapp_caselist WHERE id = '"+id+"'" )
+        cnxn.commit()
 
+    def insertexpop(self,id,expop):
+        cnxn = pyodbc.connect(r'Driver={SQL Server};Server=.\SQLEXPRESS;Database=testDB;UID=sa;PWD=80689233;')
+        cursor = cnxn.cursor()
+        cursor.execute("UPDATE boardapp_history set situa='"+expop+"' where id = '"+id+"'" )
+        cnxn.commit()
+        # datas = cursor.fetchone()
+        # return datas
     # def delete(self,idd):
 
     #     cnxn = pyodbc.connect(r'Driver={SQL Server};Server=.\SQLEXPRESS;Database=testDB;UID=sa;PWD=80689233;')

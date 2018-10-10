@@ -113,7 +113,7 @@ def logout(request):  #登出
 def change(request): #管理新增資料
 	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
 	# messages =  models.caselist.objects.filter(situa='未處理').order_by('-id')  #获取全部数据
-	limit = 5
+	limit = 10
 	paginator = Paginator(messages, limit)  #按每页10条分页
 	page = request.GET.get('page','1')  #默认跳转到第一页
 
@@ -187,25 +187,20 @@ from django.core.paginator import Paginator
 
 
 def serch(request):
-	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
-	# limit = 3
-	# paginator = Paginator(messages, limit)  #按每页10条分页
-	# page = request.GET.get('page','1')  #默认跳转到第一页
+	messages =  models.history.objects.all().order_by('-id')  #获取全部数据
+	# messages =  models.caselist.objects.filter(situa='未處理').order_by('-id')  #获取全部数据
+	limit = 10
+	paginator = Paginator(messages, limit)  #按每页10条分页
+	page = request.GET.get('page','1')  #默认跳转到第一页
 
-	# result = paginator.page(page) 
-# 每页post数量
-	limit = 5
-	messages = models.caselist.objects.all()
-	paginator = Paginator(messages, 3)
-	page = request.GET.get('page','1')
-	try:
-		messages = paginator.page(page)
-	except PageNotFound:
-		messages = paginator.page(1)
-	except EmptyPage:
-		messages = paginator.page(paginator.num_pages)
-	# result = paginator.page(page)
-	return render(request, 'change.html', context={'messages' : messages})
+	result = paginator.page(page)
+
+	name = request.session['name']
+	CNname = request.session['CNname']
+	leader = request.session['leader']
+	expop = request.session['expop']
+
+	return render(request, "serch.html", {'messages' : result,'name': name,'leader': leader,'CNname': CNname,'expop': expop},locals())
 
 import sys
 import codecs
@@ -292,18 +287,23 @@ def upload(name):
 	# 	case.delete()
 
 def getjsonid(request):
+	expop = request.session['expop']
 	q=request.POST['data2']
 	q=q[1:-1]
 	q=q.replace('"','')
 	input1_list=q.split(",")
 	print(input1_list,type(input1_list))
 	for i in input1_list:
+		check.insert(i)
+		check.insertexpop(i,expop)
+
+	for i in input1_list:	
 		case = models.caselist.objects.get(id=i)
 		case.delete()
 
 	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
 	# messages =  models.caselist.objects.filter(situa='未處理').order_by('-id')  #获取全部数据
-	limit = 5
+	limit = 10
 	paginator = Paginator(messages, limit)  #按每页10条分页
 	page = request.GET.get('page','1')  #默认跳转到第一页
 
