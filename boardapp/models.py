@@ -83,6 +83,14 @@ class check:
         cursor.execute("select exp_op from　auth_user where username = '"+user+"'")
         datas = cursor.fetchone()
         return datas
+
+
+    # def delete(self,idd):
+
+    #     cnxn = pyodbc.connect(r'Driver={SQL Server};Server=.\SQLEXPRESS;Database=testDB;UID=sa;PWD=80689233;')
+    #     cursor = cnxn.cursor()
+    #     cursor.execute("delete from boardapp_caselist where id = '"+idd+"'")
+
 import time
 import traceback
 

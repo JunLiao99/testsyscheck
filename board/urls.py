@@ -20,6 +20,7 @@ from boardapp import views
 urlpatterns = [
     url(r'^$', views.login),
     url(r'^getq/$', views.getjsonq),
+    url(r'^getid/$', views.getjsonid),
     url(r'^index/$', views.index),
     url(r'^index/(\w+)/$', views.index),
     # url(r'^post/$', views.post),

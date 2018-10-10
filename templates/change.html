@@ -69,6 +69,16 @@
         }
     </style>
 
+    <style type="text/css">
+        #hidden_enent{
+          width:200px;
+          height:150px;
+          background:#ccc;
+          text-align:center;
+          line-height:150px;
+        }
+      </style>
+
 
 
 </head>
@@ -123,7 +133,7 @@
                                     {% if messages %}
                                         {% for message in messages %}
                                             <tr class="{% cycle 'active' 'success' 'warning' 'info' %}" id="tr1">
-                                                <td><input type="checkbox" value="1" /></td>
+                                                <td><input type="checkbox" value="1" name="id" />{{ message.id }}</td>
                                                 <td>{{ message.id }}</td>
                                                 <td>{{ message.pltno }}</td>
                                                 <td>{{ message.car_tp }}</td>
@@ -134,7 +144,7 @@
                                                 <!-- <td>{{ message.vildatetime }}</td> -->
                                                 <td>{{ message.vilinf }}</td>
                                                 <td>{{ message.situa }}</td>
-                                                <td><a class="modify"> 修改 </a></td>
+                                                <td><a class="modify" href="javascript:;">修改</a></td>
                                             </tr>
                                         {% endfor %}
                                     {% else %}
@@ -142,11 +152,14 @@
                                             <td colspan="4">无数据</td>
                                         </tr>
                                     {% endif %}
+
+                                    
                                 </tbody>
                             </table>
                             
                             <input class="check" type="button" id="btn" value="檢查" />  
                             <input class="go" type="button" id="btnn" value="送出開單" />  
+
         <!-- 分页开始 -->
         <nav style="text-align:center;margin-top: 50px">
             {% for page_number in messages.paginator.page_range %}
@@ -179,7 +192,6 @@
 
 
 
-
     <script>
 
     $( "#datepicker" ).datepicker({
@@ -201,6 +213,8 @@
 		$("tr:even").css("background-color","whitesmoke");
 		
 		$(".modify").click(function(){
+            str = $(this).text()=="修改"?"确定":"修改"; 
+            $(this).text(str);
 			$(this).parent().siblings("td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7),td:eq(8)").each(function()//找同类元素td
 			{
 				var is_text = $(this).find("input:text");//判断单元格下是否含有文本框
@@ -209,7 +223,12 @@
 				}
 				else
 					$(this).html(is_text.val());
+
 			})
+            $(this).parent().siblings("td:eq(9)").each(function()
+            {
+                $(this).html('已修改')
+            })
 		});
 		
 		// $(".go").click(function(){
@@ -235,16 +254,48 @@
 
     <script>
         $('.check').click( function() {
-          var $table = $('#table01');
-          var table = $table.tableToJSON(
-                      {
-                         ignoreColumns:[0,9,10], 
-                        //  headings: ['FirstName', 'LastName', 'Score']
-                       }); // Convert the table into a javascript object
-          console.log(table);
-          alert(JSON.stringify(table));
+        var checkboxValue= new Array();
+        var checkboxText= new Array();
+	    var checkboxStr=document.getElementsByName("id"); 
+        for(var i=0; i<checkboxStr.length; i++){if(checkboxStr[i].checked){checkboxValue.push(checkboxStr[i].value);checkboxText.push(checkboxStr[i].nextSibling.nodeValue);}} 
+        alert(checkboxText);
+        var data2 = JSON.stringify(checkboxText);
 
-        var data=JSON.stringify(JSON.stringify(table));
+                    $.ajax({
+                url: "/getid/",
+                type: "post",
+                dataType : 'json',
+                data: {data2,csrfmiddlewaretoken: '{{ csrf_token }}'}
+                // success: function (data) {  
+                //     console.log('ss');
+                // }
+            })
+
+        var $chkBoxes = $('#table01').find('input:checked');
+        var $ids = [];
+        if ($chkBoxes.length == 0) {         //如果不勾选弹出警告框
+      alert('请至少选择一个数据集');
+      return false;
+    }
+    //遍历被选中的checkbox集
+    // $($chkBoxes).each(function () { 
+    //   $ids.push( $(this).attr('td:eq(1)') );   //找到对应checkbox中data-id属性值，然后push给空数组$ids
+    // });
+    // var $ids_str = $ids.join(',');              //将数组转化为用逗号隔开的字符串
+    // //( 还有一种写法：var $ids_str += ','+($ids + '') ) ，Number型加上空字符串''可以将Number转化为字符串
+    // console.log($ids_str);
+
+        // var $table = $('#table01').find('checked');
+        // var $table = $('#table01');
+        // var table = $table.tableToJSON(
+        //               {
+        //                  ignoreColumns:[0,9,10], 
+        //                 //  headings: ['FirstName', 'LastName', 'Score']
+        //                }); // Convert the table into a javascript object
+        //   console.log(table);
+          
+        //   alert(JSON.stringify(table));
+
 
         });
 
@@ -256,6 +307,7 @@
             data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
           });
         $('#btnn').click( function() {
+            // var $table = $('#table01').prop('checked');
             var $table = $('#table01');
             var table = $table.tableToJSON(
                       {

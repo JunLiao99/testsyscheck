@@ -98,13 +98,13 @@ def logout(request):  #登出
 	return redirect('/index/')
 
 def change(request): #管理新增資料
-
 	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
+	# messages =  models.caselist.objects.filter(situa='未處理').order_by('-id')  #获取全部数据
 	limit = 5
 	paginator = Paginator(messages, limit)  #按每页10条分页
 	page = request.GET.get('page','1')  #默认跳转到第一页
 
-	result = paginator.page(page) 
+	result = paginator.page(page)
 
 	name = request.session['name']
 	CNname = request.session['CNname']
@@ -227,31 +227,20 @@ def getjsonq(request):
 	# print(json_data)
 	# store(json_data)
 	filename = leader+'_'+exp_dt+exp_tm+'_'+exp_op+'.json'
+	print(filename)
 
 	js = json.dumps(d, sort_keys=False, indent=4, separators=(',', ':'),ensure_ascii=False)
 	fp = codecs.open(filename, 'a+', 'utf-8')
 	fp.write(js)
 	fp.close()
 
-# def store(data):
-# 	we = 'goos'+'.json'
-# 	with open(we, 'a') as f:
-# 		f.write(data.encode(sys.stdin.encoding, "replace").decode(sys.stdin.encoding))
-
-
-
-	# json_data = json.dumps(q, ensure_ascii=False, indent=4, sort_keys=True) + ','
-	# store(json_data)
-
-# def store(data):
-# 	with open(output.txt, 'a') as f:
-# 		f.write(data.encode(sys.stdin.encoding, "replace").decode(sys.stdin.encoding))
-    # store(json_data)
-	# fp.close()
-	# if request.method == 'POST':   #当request为POST的时候
-	# 	nickname = request.POST.get('ss')  #获取ajax POST的nickname值
-	# 	print('111')
-	# 	return HttpResponse(nickname)
-	# data = json.loads(request.body)
-	# print (data['key'])
-	# print('111')
+def getjsonid(request):
+	q=request.POST['data2']
+	q=q[1:-1]
+	q=q.replace('"','')
+	input1_list=q.split(",")
+	print(input1_list,type(input1_list))
+	for i in input1_list:
+		case = models.caselist.objects.get(id=i)
+		case.delete()
+	# return render(request, 'change.html', context={'messages' : messages})
