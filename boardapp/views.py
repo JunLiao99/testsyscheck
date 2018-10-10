@@ -1,3 +1,4 @@
+# encoding:utf-8
 from django.shortcuts import render, redirect
 from boardapp import models, forms
 from django.contrib.auth import authenticate
@@ -13,6 +14,8 @@ check = models.check()
 page = 0  #目前頁面,0為第1頁
 
 def index(request, pageindex=None):  #首頁
+	name = request.session['name']
+	CNname = request.session['CNname']
 	global page  #重複開啟本網頁時需保留 page1 的值
 	pagesize = 3  #每頁顯示的資料筆數
 	boardall = models.BoardUnit.objects.all().order_by('-id')  #讀取資料表,依時間遞減排序
@@ -68,10 +71,13 @@ def login(request):  #登入
 		user1 = authenticate(username=name, password=password)  #驗證
 		if user1 is not None:  #驗證通過
 			if user1.is_active:  #帳號有效
-				print("ok")
 				auth.login(request, user1)  #登入
 				word = check.checkuser(name)
-				print(word)
+				request.session['name'] = name
+				pname = request.session['name']
+				CNname = word[6]
+				request.session['CNname'] = CNname
+				# print(CNname,'sss')
 				return redirect('/index/')  #開啟管理頁面
 			else:  #帳號無效
 				message = '帳號尚未啟用！'
@@ -84,10 +90,23 @@ def logout(request):  #登出
 	return redirect('/index/')
 
 def change(request): #管理新增資料
-	return render(request, "change.html", locals())
 
-def serch(request): #管理新增資料
-	return render(request, "serch.html", locals())
+	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
+	limit = 5
+	paginator = Paginator(messages, limit)  #按每页10条分页
+	page = request.GET.get('page','1')  #默认跳转到第一页
+
+	result = paginator.page(page) 
+
+	name = request.session['name']
+	CNname = request.session['CNname']
+	print(name)
+	print(CNname)
+	# return render(request, 'serchQ.html', {'messages' : result})
+	return render(request, "change.html", {'messages' : result},locals())
+
+# def serch(request): #管理新增資料
+# 	return render(request, "serch.html", locals())
 
 def adminmain(request, pageindex=None):  #管理頁面
 	global page
@@ -130,8 +149,87 @@ def delete(request, boardid=None, deletetype=None):  #刪除資料
 
 
 from django.db.models import Count,Sum
+#只需修改index函数即可
+from django.core.paginator import Paginator
+
+# def serch(request):
+# 	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
+# 	limit = 1
+# 	paginator = Paginator(messages, 3)  #按每页10条分页
+# 	page = request.GET.get('page','1')  #默认跳转到第一页
+
+# 	result = paginator.page(page) 
+
+# 	return render(request, 'change.html', {'messages' : result})
 
 
 
 
+def serch(request):
+	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
+	# limit = 3
+	# paginator = Paginator(messages, limit)  #按每页10条分页
+	# page = request.GET.get('page','1')  #默认跳转到第一页
 
+	# result = paginator.page(page) 
+	
+
+# 每页post数量
+	limit = 5
+	messages = models.caselist.objects.all()
+	paginator = Paginator(messages, 3)
+	page = request.GET.get('page','1')
+	try:
+		messages = paginator.page(page)
+	except PageNotFound:
+		messages = paginator.page(1)
+	except EmptyPage:
+		messages = paginator.page(paginator.num_pages)
+	# result = paginator.page(page)
+	return render(request, 'change.html', context={'messages' : messages})
+
+import sys
+import codecs
+import json
+def getjsonq(request):
+	print('111')
+	q=request.POST
+	# json.dumps(q)
+	q=(q.dict())
+	# q = json.dumps(q, sort_keys=True, indent=4, separators=(',', ':'),ensure_ascii=False)
+	# del q['csrfmiddlewaretoken']
+	q = q['data1']
+	q = q[1:-1]
+	# q = q.replace("\\" , "")
+	# q = q.strip(' "[]" ')	
+	print(q,type(q))
+	# json_data = json.dumps(q, ensure_ascii=False, indent=4, sort_keys=True) + ','
+	# print(json_data)
+	# store(json_data)
+
+	fp = codecs.open('output.json', 'a+', 'utf-8')
+	fp.write(q)
+	fp.close()
+
+# def store(data):
+# 	we = 'goos'+'.json'
+# 	with open(we, 'a') as f:
+# 		f.write(data.encode(sys.stdin.encoding, "replace").decode(sys.stdin.encoding))
+
+
+
+	# json_data = json.dumps(q, ensure_ascii=False, indent=4, sort_keys=True) + ','
+	# store(json_data)
+
+# def store(data):
+# 	with open(output.txt, 'a') as f:
+# 		f.write(data.encode(sys.stdin.encoding, "replace").decode(sys.stdin.encoding))
+    # store(json_data)
+	# fp.close()
+	# if request.method == 'POST':   #当request为POST的时候
+	# 	nickname = request.POST.get('ss')  #获取ajax POST的nickname值
+	# 	print('111')
+	# 	return HttpResponse(nickname)
+	# data = json.loads(request.body)
+	# print (data['key'])
+	# print('111')

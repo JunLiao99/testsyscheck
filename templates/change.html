@@ -73,16 +73,12 @@
 
 </head>
 <body>
+        {% block twomenu %}
         <div class="container">
                 <div class="row">
                 <div class="col-sm-1">
                         <button type="button" class="btn btn-outline-dark">查詢</button>
                 </div>
-
-                  <!-- <div class="col-sm">
-                    <div id="datepicker"><p>開始日期：<input type="text" id="datepicker"></p></div>
-                  </div> -->
-
                   <div class="col-sm">
                     <p>開始日期：<input type="text" id="datepicker"></p>
                   </div>
@@ -93,10 +89,11 @@
 
                   <div class="col-sm">
                         <div class="row-6">
-                            <H3 style="margin-left:90px">舉發單位:</H3> 
+                            <H3 style="margin-left:90px">舉發單位: {{ name }} </H3> 
                         </div>
                         <div class="row-sm" style="margin-top:10px">
-                                <H3 style="margin-left:90px">舉發員警:</H3> 
+                            <h2> </h2>
+                                <H3 style="margin-left:90px">舉發員警: {{CNname}} </H3> 
                         </div>
                         <div class="row-sm"style="margin-top:5px;margin-left:40px">
                             <img src="https://s.yimg.com/uu/api/res/1.2/Fs376FlVZIlxOIonUBfP4w--/YXBwaWQ9eXRhY2h5b247cT03NTs-/http://media.zenfs.com/zh-Hant-TW/homerun/tw.autos.yahoo.com/bf6eb52f0f51f58d18c472db69c9263d" width="300" height="300">
@@ -104,134 +101,63 @@
                   </div>
                 </div>
               </div>
-              
+              {% endblock %}
               <div class="container" style="margin-top:-280px">
                     <div class="row">
                       <div class="col-sm-6">
-                            <table border="1px">
+                            <table border="1px" table id="table01">
                                 <tr>
-                                    <th>事件編號</th>
-                                    <th>事件發生時間</th>
-                                    <th>地點</th>
-                                    <th>車牌號碼</th>
-                                    <th>車顏色</th>
+                                    <th>勾選可開單</th>
+                                    <th>流水號</th>
+                                    <th>車號</th>
+                                    <th>車別</th>
+                                    <th>7碼違規日期(日)</th>
+                                    <th>4碼違規時間(時)</th>
+                                    <th>違規地點代碼</th>
+                                    <th>違規條款代碼</th>
+                                    <th>中文備註</th>
                                     <th>處理狀態</th>
-                                    <th>操作人員</th>
-                                    <th>修正時間</th>
                                     <th>修正動作</th>
                                 </tr>
-                                <tr id="tr1">
-                                    <td>1</td>
-                                    <td>王明</td>
-                                    <td>男</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
-                                <tr id="tr2">
-                                    <td>2</td>
-                                    <td>小花</td>
-                                    <td>女</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
-                                <tr id="tr3">
-                                    <td>3</td>
-                                    <td>小明</td>
-                                    <td>男</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
-                                <tr id="tr3">
-                                    <td>3</td>
-                                    <td>小明</td>
-                                    <td>男</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
-                                <tr id="tr3">
-                                    <td>3</td>
-                                    <td>小明</td>
-                                    <td>男</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
-                                <tr id="tr3">
-                                    <td>3</td>
-                                    <td>小明</td>
-                                    <td>男</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
-                                <tr id="tr3">
-                                    <td>3</td>
-                                    <td>小明</td>
-                                    <td>男</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
-                                <tr id="tr3">
-                                    <td>3</td>
-                                    <td>小明</td>
-                                    <td>男</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
-                                <tr id="tr3">
-                                    <td>3</td>
-                                    <td>小明</td>
-                                    <td>男</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
-                                <tr id="tr3">
-                                    <td>3</td>
-                                    <td>小明</td>
-                                    <td>男</td>
-                                    <td>1234568792</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td>十三大街</td>
-                                    <td>蓝桥一期</td>
-                                    <td><a class="modify"> 修改 </a><a class="remove"> 删除 </a></td>
-                                </tr>
+                                <tbody>
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            <tr class="{% cycle 'active' 'success' 'warning' 'info' %}" id="tr1">
+                                                <td><input type="checkbox" value="1" /></td>
+                                                <td>{{ message.id }}</td>
+                                                <td>{{ message.pltno }}</td>
+                                                <td>{{ message.car_tp }}</td>
+                                                <td>{{ message.vil_dt }}</td>
+                                                <td>{{ message.vil_tm }}</td>
+                                                <td>{{ message.vil_add }}</td>
+                                                <td>{{ message.rule_1 }}</td>
+                                                <!-- <td>{{ message.vildatetime }}</td> -->
+                                                <td>{{ message.vilinf }}</td>
+                                                <td>{{ message.situa }}</td>
+                                                <td><a class="modify"> 修改 </a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="4">无数据</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
                             </table>
-
+                            
+                            <input class="check" type="button" id="btn" value="檢查" />  
+                            <input class="go" type="button" id="btnn" value="送出開單" />  
+        <!-- 分页开始 -->
+        <nav style="text-align:center;margin-top: 50px">
+            {% for page_number in messages.paginator.page_range %}
+            {% ifequal page_number posts.number %}
+                {{ page_number }}
+            {% else %}
+                <a  href="?page={{ page_number }}">{{ page_number }}</a>
+            {% endifequal %}
+            {% endfor %}
+        </nav>
+        <!-- 分页结束 -->
 
 
                     </div>
@@ -267,38 +193,147 @@
 
     </script>
 
-    <!-- <script type="text/javascript" src="js/jquery-2.2.3.min.js"></script> -->
+    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+    
     <script>
 		$("th").css({"background-color":"dimgray","color":"white"});
 		$("tr:odd").css("background-color","#DCDCDC");
 		$("tr:even").css("background-color","whitesmoke");
 		
 		$(".modify").click(function(){
-			$(this).parent().siblings("td").each(function()//找同类元素td
+			$(this).parent().siblings("td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7),td:eq(8)").each(function()//找同类元素td
 			{
 				var is_text = $(this).find("input:text");//判断单元格下是否含有文本框
 				if (!is_text.length) {
-					$(this).html("<input size='5' type='text' value=' "+$(this).text()+" ' />");
+					$(this).html("<input size='3' type='text' value=' "+$(this).text()+" ' />");
 				}
 				else
 					$(this).html(is_text.val());
 			})
 		});
 		
-		$(".remove").click(function(){
-			if(window.confirm("您确定要删除数据吗?"))
-			{
-				$(this).parent().parent().remove();
-			}
-		});
-	</script>
+		// $(".go").click(function(){
+		// 	{
+        //         var t01 = $("#table01 tr").length;
+        //     alert(t01);
+        //     $("#table01").find("td").each(function(i) {
+        //         var t = $(this).text();
+        //         alert(t);
+        //     });
+		// 	}
+		// });
+        
+
+        
+
+    </script>
+    <script>
+            $.ajaxSetup({
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+    </script>
+
+    <script>
+        $('.check').click( function() {
+          var $table = $('#table01');
+          var table = $table.tableToJSON(
+                      {
+                         ignoreColumns:[0,9,10], 
+                        //  headings: ['FirstName', 'LastName', 'Score']
+                       }); // Convert the table into a javascript object
+          console.log(table);
+          alert(JSON.stringify(table));
+
+        var data=JSON.stringify(JSON.stringify(table));
+
+        });
+
+        // $('#btnn').click( function() {
+        //     // var data=JSON.stringify(JSON.stringify(table));
+        //     // data = {'name':name,};
+        //     // alert('ok')
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/getq/",
+        //         dataType: "json",
+        //         data: JSON.stringify(data),
+        //         success: function(result) {
+        //             alert('ok');
+        //         }
+        //         .fail(function () {
+        //     alert("请求失败");
+        //     })
+
+                
+        // });
+        // });
+    </script>
 
 
+<script>
+        $.ajaxSetup({
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+        $('#btnn').click( function() {
+            var $table = $('#table01');
+            var table = $table.tableToJSON(
+                      {
+                         ignoreColumns:[0,9,10], 
+                        //  headings: ['FirstName', 'LastName', 'Score']
+                       }); // Convert the table into a javascript object
+            console.log('ss')
+            var data1=JSON.stringify(table);
+        // 觸發ajax事件
+            $.ajax({
+                url: "/getq/",
+                type: "post",
+                dataType : 'json',
+                data: {data1,csrfmiddlewaretoken: '{{ csrf_token }}'}
+                // success: function (data) {  
+                //     console.log('ss');
+                // }
+            })
+    });
+    
+</script>
+
+    <!-- // $(function(){
+    //     $('.go').on('click', function(){
+    //         alert('ok')
+    //         $.ajax({
+    //             url : 'getq/',
+    //             method  : 'POST',
+    //             dataType : 'json',
+    //             async: false,
+    //             success : function(data){
+    //                 alert('ok')
+    //             }
+    //         });
+
+    //     });
+
+        // $('.go').click( function() {
+        //     var data=JSON.stringify(JSON.stringify(table));
+        //     $.ajax({
+        //     type:"POST",
+        //     url:"getjsonq/",
+        //     data:data,
+        //     contentType:"application/json", 
+        //     success:function(data){
+        //         alert('ok')
+        //         //显示数据
+        //     }
+        // });
+        // }); -->
+        </script>
+
+        
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static "js/jquery.tabletojson.js" %}"> </script>
   </body>
 </html>

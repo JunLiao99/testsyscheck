@@ -13,6 +13,33 @@ class BoardUnit(models.Model):
     def __str__(self):
         return self.bsubject
 
+class caselist(models.Model):
+    xactno = models.CharField(max_length=200, null=False)
+    pltno = models.CharField(max_length=100, default='m', null=False)
+    car_tp = models.CharField(max_length=100, null=False)
+    vil_dt = models.CharField(max_length=100, null=False)
+    vil_tm = models.EmailField(max_length=100, blank=True, default='')
+    vil_add = models.CharField(max_length=200, blank=True, default='')
+    rule_1 = models.TextField(null=False)
+    vildatetime = models.DateTimeField(auto_now=True)
+    vilinf = models.TextField(blank=True, default='')
+    situa = models.TextField(blank=True, default='')
+    # def __str__(self):
+    #     return self.caseNAME
+
+class ourdate(models.Model):
+    usernameQ = models.CharField(max_length=200, null=False)
+    passwordQ = models.CharField(max_length=200, null=False)
+    leader = models.CharField(max_length=200, null=False)
+    exp_dt = models.CharField(max_length=100, default='m', null=False)
+    exp_tm = models.CharField(max_length=100, null=False)
+    exp_op = models.CharField(max_length=100, null=False)
+    vilcnt = models.CharField(max_length=100, blank=True, default='')
+    piccnt = models.CharField(max_length=200, blank=True, default='')
+    vilrec = models.TextField(null=False)
+    # def __str__(self):
+    #     return self.caseNAME
+
 
 class check:
     def checkuser(self,name):
@@ -25,6 +52,23 @@ class check:
         print(datas)
         return datas
 
+    def listall(self):
+        cnxn = pyodbc.connect(r'Driver={SQL Server};Server=.\SQLEXPRESS;Database=testDB;UID=sa;PWD=80689233;')
+        cursor = cnxn.cursor()
+        cursor.execute("select * from　case_n")
+        # cursor.execute("select * from　auth_user where name = %s",(name,))
+        datas = cursor.fetchall()
+        print(datas)
+        return datas
+
+    def CNname(self,user):
+        cnxn = pyodbc.connect(r'Driver={SQL Server};Server=.\SQLEXPRESS;Database=testDB;UID=sa;PWD=80689233;')
+        cursor = cnxn.cursor()
+        cursor.execute("select last_name from　auth_user where username = '"+user+"'")
+        # cursor.execute("select * from　auth_user where name = %s",(name,))
+        datas = cursor.fetchone()
+        print(datas)
+        return datas
         # with connection.cursor() as cursor:
         #     cursor.execute("select * from products")
         #     datas = cursor.fetchall()
