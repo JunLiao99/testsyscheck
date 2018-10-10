@@ -108,7 +108,7 @@ def login(request):  #登入
 
 def logout(request):  #登出
 	auth.logout(request)
-	return redirect('/index/')
+	return redirect('/login/')
 
 def change(request): #管理新增資料
 	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
