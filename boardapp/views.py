@@ -37,29 +37,29 @@ def index(request, pageindex=None):  #首頁
 	currentpage = page + 1  #將目頁前頁面以區域變數傳回html
 	return render(request, "index.html", locals())
 
-def post(request):  #新增留言
-	if request.method == "POST":  #如果是以POST方式才處理
-		postform = forms.PostForm(request.POST)  #建立forms物件
-		if postform.is_valid():  #通過forms驗證
-		  subject = postform.cleaned_data['boardsubject']  #取得輸入資料
-		  name =  postform.cleaned_data['boardname']
-		  boo =  postform.cleaned_data['boardgender']
-		  if boo == True: gender = 'm'
-		  else: gender = 'f'
-		  mail = postform.cleaned_data['boardmail']
-		  web =  postform.cleaned_data['boardweb']
-		  content =  postform.cleaned_data['boardcontent']
-		  unit = models.BoardUnit.objects.create(bname=name, bgender=gender, bsubject=subject, bmail=mail, bweb=web, bcontent=content, bresponse='')  #新增資料記錄
-		  unit.save()  #寫入資料庫
-		  message = '已儲存...'
-		  postform = forms.PostForm()
-		  return redirect('/index/')	
-		else:
-		  message = '驗證碼錯誤！'	
-	else:
-		message = '標題、姓名、內容及驗證碼必須輸入！'
-		postform = forms.PostForm()
-	return render(request, "post.html", locals())
+# def post(request):  #新增留言
+# 	if request.method == "POST":  #如果是以POST方式才處理
+# 		postform = forms.PostForm(request.POST)  #建立forms物件
+# 		if postform.is_valid():  #通過forms驗證
+# 		  subject = postform.cleaned_data['boardsubject']  #取得輸入資料
+# 		  name =  postform.cleaned_data['boardname']
+# 		  boo =  postform.cleaned_data['boardgender']
+# 		  if boo == True: gender = 'm'
+# 		  else: gender = 'f'
+# 		  mail = postform.cleaned_data['boardmail']
+# 		  web =  postform.cleaned_data['boardweb']
+# 		  content =  postform.cleaned_data['boardcontent']
+# 		  unit = models.BoardUnit.objects.create(bname=name, bgender=gender, bsubject=subject, bmail=mail, bweb=web, bcontent=content, bresponse='')  #新增資料記錄
+# 		  unit.save()  #寫入資料庫
+# 		  message = '已儲存...'
+# 		  postform = forms.PostForm()
+# 		  return redirect('/index/')	
+# 		else:
+# 		  message = '驗證碼錯誤！'	
+# 	else:
+# 		message = '標題、姓名、內容及驗證碼必須輸入！'
+# 		postform = forms.PostForm()
+# 	return render(request, "post.html", locals())
 
 def login(request):  #登入
 	# word = check.checkuser()
@@ -74,9 +74,17 @@ def login(request):  #登入
 				auth.login(request, user1)  #登入
 				word = check.checkuser(name)
 				request.session['name'] = name
+
 				pname = request.session['name']
 				CNname = word[6]
 				request.session['CNname'] = CNname
+
+				leader = check.leader(name)
+				request.session['leader'] = leader[0]
+
+				expop = check.expop(name)
+				request.session['expop'] = expop[0]
+				
 				# print(CNname,'sss')
 				return redirect('/index/')  #開啟管理頁面
 			else:  #帳號無效
@@ -100,10 +108,10 @@ def change(request): #管理新增資料
 
 	name = request.session['name']
 	CNname = request.session['CNname']
-	print(name)
-	print(CNname)
-	# return render(request, 'serchQ.html', {'messages' : result})
-	return render(request, "change.html", {'messages' : result},locals())
+	leader = request.session['leader']
+	expop = request.session['expop']
+
+	return render(request, "change.html", {'messages' : result,'name': name,'leader': leader,'CNname': CNname,'expop': expop},locals())
 
 # def serch(request): #管理新增資料
 # 	return render(request, "serch.html", locals())
@@ -172,8 +180,6 @@ def serch(request):
 	# page = request.GET.get('page','1')  #默认跳转到第一页
 
 	# result = paginator.page(page) 
-	
-
 # 每页post数量
 	limit = 5
 	messages = models.caselist.objects.all()
@@ -191,10 +197,18 @@ def serch(request):
 import sys
 import codecs
 import json
+from collections import OrderedDict
 def getjsonq(request):
-	print('111')
-	q=request.POST['data1']
 
+	q=request.POST['data1']
+	leader = request.session['leader']
+	exp_op = request.session['expop']
+	exp_dt=datetime.datetime.now().strftime('%Y%m%d')
+	exp_dt=str(int(exp_dt)-19110000)
+	exp_tm=datetime.datetime.now().strftime('%H%M%S')
+
+	vilcnt = 35
+	piccnt = 35
 	# json.dumps(q)
 	# q=(q.dict())
 	# q = json.dumps(q, sort_keys=True, indent=4, separators=(',', ':'),ensure_ascii=False)
@@ -202,16 +216,20 @@ def getjsonq(request):
 	# q = q['data1']
 	# q = q[1:-1]
 	result = json.loads(q)
-	js = json.dumps(result, sort_keys=True, indent=4, separators=(',', ':'), ensure_ascii=False)
 	print(result)
+
+	d = {"leader": leader, "exp_dt": exp_dt, "exp_tm": exp_tm, "exp_op": exp_op,
+		"vilcnt": vilcnt, "piccnt": piccnt, "vilrec":result}
 	# q = q.replace("\\" , "")
 	# q = q.strip(' "[]" ')	
 	# print(q,type(q))
 	# q = json.dumps(q, ensure_ascii=False, indent=4, sort_keys=True) + ','
 	# print(json_data)
 	# store(json_data)
+	filename = leader+'_'+exp_dt+exp_tm+'_'+exp_op+'.json'
 
-	fp = codecs.open('output.json', 'a+', 'utf-8')
+	js = json.dumps(d, sort_keys=False, indent=4, separators=(',', ':'),ensure_ascii=False)
+	fp = codecs.open(filename, 'a+', 'utf-8')
 	fp.write(js)
 	fp.close()
 

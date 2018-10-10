@@ -67,12 +67,22 @@ class check:
         cursor.execute("select last_name from　auth_user where username = '"+user+"'")
         # cursor.execute("select * from　auth_user where name = %s",(name,))
         datas = cursor.fetchone()
-        print(datas)
+        # print(datas)
         return datas
-        # with connection.cursor() as cursor:
-        #     cursor.execute("select * from products")
-        #     datas = cursor.fetchall()
-        # return datas
+
+    def leader(self,user):
+        cnxn = pyodbc.connect(r'Driver={SQL Server};Server=.\SQLEXPRESS;Database=testDB;UID=sa;PWD=80689233;')
+        cursor = cnxn.cursor()
+        cursor.execute("select leader from　auth_user where username = '"+user+"'")
+        datas = cursor.fetchone()
+        return datas
+
+    def expop(self,user):
+        cnxn = pyodbc.connect(r'Driver={SQL Server};Server=.\SQLEXPRESS;Database=testDB;UID=sa;PWD=80689233;')
+        cursor = cnxn.cursor()
+        cursor.execute("select exp_op from　auth_user where username = '"+user+"'")
+        datas = cursor.fetchone()
+        return datas
 import time
 import traceback
 

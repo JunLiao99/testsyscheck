@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^getq/$', views.getjsonq),
     url(r'^index/$', views.index),
     url(r'^index/(\w+)/$', views.index),
-    url(r'^post/$', views.post),
+    # url(r'^post/$', views.post),
     url(r'^login/$', views.login),
     url(r'^change/$', views.change),
     url(r'^serch/$', views.serch),
