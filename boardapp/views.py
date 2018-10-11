@@ -13,16 +13,21 @@ from ftplib import FTP
 import os
 import time
 
+##192.168.1.163 公司網路
+##172.20.10.6 手機網路
 
-# ftp_server='172.20.10.6'
-# ftp_user='test_1'
-# ftp_password='aa123456'
+ftp_server='192.168.1.163'
+ftp_user='test_1'
+ftp_password='aa123456'
 
+# 惠隆 server
 # ftp_server='211.20.60.14'
 # ftp_user='Giantech'
 # ftp_password='NtpdTr@ffic107'
 
-
+##本地的圖片放置路徑
+picurl = "C:/Users/user/Desktop/company_web/test1/board/static/"
+global dirname
 
 check = models.check()
 
@@ -133,60 +138,11 @@ def change(request): #管理新增資料
 # def serch(request): #管理新增資料
 # 	return render(request, "serch.html", locals())
 
-def adminmain(request, pageindex=None):  #管理頁面
-	global page
-	pagesize = 3
-	boardall = models.BoardUnit.objects.all().order_by('-id')
-	datasize = len(boardall)
-	totpage = math.ceil(datasize / pagesize)
-	if pageindex==None:
-		page =0
-		boardunits = models.BoardUnit.objects.order_by('-id')[:pagesize]
-	elif pageindex=='prev':
-		start = (page-1)*pagesize
-		if start >= 0:
-			boardunits = models.BoardUnit.objects.order_by('-id')[start:(start+pagesize)]
-			page -= 1
-	elif pageindex=='next':
-		start = (page+1)*pagesize
-		if start < datasize:
-			boardunits = models.BoardUnit.objects.order_by('-id')[start:(start+pagesize)]
-			page += 1
-	elif pageindex=='ret':  #按確定修改鈕後返回
-		start = page*pagesize
-		boardunits = models.BoardUnit.objects.order_by('-id')[start:(start+pagesize)]
-	else:  #按確定修改鈕會以pageindex傳入資料id
-		unit = models.BoardUnit.objects.get(id=pageindex)  #取得要修改的資料記錄
-		unit.bsubject=request.POST.get('boardsubject', '')
-		unit.bcontent=request.POST.get('boardcontent', '')
-		unit.bresponse=request.POST.get('boardresponse', '')
-		unit.save()  #寫入資料庫
-		return redirect('/adminmain/ret/')  #返回管理頁面,參數為ret
-	currentpage = page+1
-	return render(request, "adminmain.html", locals())
-
-def delete(request, boardid=None, deletetype=None):  #刪除資料
-	unit = models.BoardUnit.objects.get(id=boardid)  #讀取指定資料
-	if deletetype == 'del':  #按確定刪除鈕
-		unit.delete()
-		return redirect('/adminmain/')
-	return render(request, "delete.html", locals())
 
 
 from django.db.models import Count,Sum
 #只需修改index函数即可
 from django.core.paginator import Paginator
-
-# def serch(request):
-# 	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
-# 	limit = 1
-# 	paginator = Paginator(messages, 3)  #按每页10条分页
-# 	page = request.GET.get('page','1')  #默认跳转到第一页
-
-# 	result = paginator.page(page) 
-
-# 	return render(request, 'change.html', {'messages' : result})
-
 
 
 
@@ -219,7 +175,7 @@ def getjsonq(request):
 	exp_dt=str(int(exp_dt)-19110000)
 	exp_tm=datetime.datetime.now().strftime('%H%M')
 	if len(exp_tm) == 3:
-		exp_tm = '0'+exp_tm
+		exp_tm = 't'+exp_tm
 
 	print(exp_tm,'sssaaaaaaaaaaa')
 
@@ -231,27 +187,27 @@ def getjsonq(request):
 
 	d = {"leader": leader, "exp_dt": exp_dt, "exp_tm": exp_tm, "exp_op": exp_op,
 		"vilcnt": vilcnt, "piccnt": piccnt, "vilrec":result}
-	# q = q.replace("\\" , "")
-	# q = q.strip(' "[]" ')	
-	# print(q,type(q))
-	# q = json.dumps(q, ensure_ascii=False, indent=4, sort_keys=True) + ','
-	# print(json_data)
-	# store(json_data)
+
 	filename = leader+'_'+exp_dt+exp_tm+'_'+exp_op+'.json'
 	dirname = leader+'_'+exp_dt+exp_tm+'_'+exp_op
-	print(filename)
+	# print(dirname)
+	request.session['dirn'] = dirname
+	ab = request.session['dirn']
+	print(ab,'ababababababa')
 
 	js = json.dumps(d, sort_keys=False, indent=4, separators=(',', ':'),ensure_ascii=False)
 	fp = codecs.open("jsonfile/"+filename, 'a+', 'utf-8')
 	fp.write(js)
 	fp.close()
 	time.sleep(3)
-	upload(filename,dirname)
+	localpath = "/Users/user/Desktop/company_web/test1/board/jsonfile/"
+	upload(filename,dirname,localpath)
 
 	
-
-def upload(name,dirname):
-	local_uploadfile="/Users/user/Desktop/company_web/test1/board/jsonfile/"+name
+#要求3個參數 要存的名字 資料夾名字 本地檔案路徑
+def upload(name,dirname,localpath):
+	local_uploadfile=localpath + name
+	print(local_uploadfile,'tetstests===============================')
 	sever_will_savefile=name
 
 	bufsize=1024
@@ -282,22 +238,66 @@ def upload(name,dirname):
 		with open(local_uploadfile,'rb') as  f_up:
 			ftp.storbinary('STOR '+  sever_will_savefile, f_up ,bufsize)
 	except:
-		print("upload failed. check your permission.")
+		print("uploadpic failed. check your permission.-----------------------------------------------------------------------------------------------------------------")
   
  
 	print("ftp upload successful.exit...")
 	ftp.quit()
-    ##發出後刪除資料
-	# q=request.POST['data2']
-	# q=q[1:-1]
-	# q=q.replace('"','')
-	# input1_list=q.split(",")
-	# print(input1_list,type(input1_list))
-	# for i in input1_list:
-	# 	case = models.caselist.objects.get(id=i)
-	# 	case.delete()
 
+
+#要求3個參數 要存的名字 資料夾名字 本地檔案路徑
+def uploadpic(name,dirname,localpath):
+	local_uploadfile=localpath
+	print(local_uploadfile,'tetstests===============================')
+	sever_will_savefile=name
+
+	bufsize=1024
+
+	ftp_backup_dir=dirname
+
+	socket.setdefaulttimeout(60)  #超時FTP時間設置為60秒
+	ftp = FTP(ftp_server)
+	print("login ftp...")
+	try:
+		ftp.login(ftp_user, ftp_password)
+		print(ftp.getwelcome())  #獲得歡迎信息
+		try:
+			if ftp_backup_dir in ftp.nlst():
+				print("found backup folder in ftp server, upload processing.")
+			else:
+					print("don't found backup folder in ftp server, try to build it.")
+					ftp.mkd(ftp_backup_dir)
+		except:
+			print("the folder" + ftp_backup_dir + "doesn't exits and can't be create!")
+			sys.exit()
+	except:
+		print("ftp login failed.exit.")
+		sys.exit()
+	ftp.cwd(ftp_backup_dir)
+	print("upload data...")
+	try:
+		with open(local_uploadfile,'rb') as  f_up:
+			ftp.storbinary('STOR '+  sever_will_savefile, f_up ,bufsize)
+	except:
+		print("uploadpic failed. check your permission.-----------------------------------------------------------------------------------------------------------------")
+  
+ 
+	print("ftp upload successful.exit...")
+	ftp.quit()
+##流水號 idd	
+idd = 0
 def getjsonid(request):
+
+	
+	leader = request.session['leader']
+	exp_op = request.session['expop']
+	exp_dt=datetime.datetime.now().strftime('%Y%m%d')
+	exp_dt=str(int(exp_dt)-19110000)
+	exp_tm=datetime.datetime.now().strftime('%H%M')
+	dirname = leader+'_'+exp_dt+exp_tm+'_'+exp_op
+
+
+	print('='*150)
 	expop = request.session['expop']
 	q=request.POST['data2']
 	q=q[1:-1]
@@ -308,9 +308,24 @@ def getjsonid(request):
 		check.insert(i)
 		check.insertexpop(i,expop)
 
-	for i in input1_list:	
+	for i in input1_list:
+		##取勾選的Id 取該ID的車牌 違規日期 違規地點代碼 流水號idd
 		case = models.caselist.objects.get(id=i)
-		case.delete()
+		plt_no = case.pltno  ##車牌
+		opentm = case.vildatetime.strftime('%Y%m%d%H%S')  
+		twtm = str(int(opentm)-191100000000) #違規日期
+		add = case.vil_add
+		piclink = case.piclink #要傳去上傳function用
+		#合併成圖片輸出名字
+		# jpgname = str(i)+".txt"
+		jpgname = plt_no+"_"+twtm+"_"+add+"_"+str(idd)+".jpg"
+		print(jpgname)
+		picurl = "/Users/user/Desktop/company_web/test1/board/static/"+piclink
+
+
+		uploadpic(jpgname,dirname,picurl)
+
+		# case.delete()
 
 	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
 	# messages =  models.caselist.objects.filter(situa='未處理').order_by('-id')  #获取全部数据
