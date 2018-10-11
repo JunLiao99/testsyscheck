@@ -14,10 +14,14 @@ import os
 import time
 
 
-ftp_server='192.168.0.3'
-ftp_user='test_1'
-ftp_password='aa123456'
-ftp_backup_dir='backup'
+# ftp_server='172.20.10.6'
+# ftp_user='test_1'
+# ftp_password='aa123456'
+
+# ftp_server='211.20.60.14'
+# ftp_user='Giantech'
+# ftp_password='NtpdTr@ffic107'
+
 
 
 check = models.check()
@@ -213,7 +217,11 @@ def getjsonq(request):
 	exp_op = request.session['expop']
 	exp_dt=datetime.datetime.now().strftime('%Y%m%d')
 	exp_dt=str(int(exp_dt)-19110000)
-	exp_tm=datetime.datetime.now().strftime('%H%M%S')
+	exp_tm=datetime.datetime.now().strftime('%H%M')
+	if len(exp_tm) == 3:
+		exp_tm = '0'+exp_tm
+
+	print(exp_tm,'sssaaaaaaaaaaa')
 
 	vilcnt = 35
 	piccnt = 35
@@ -230,6 +238,7 @@ def getjsonq(request):
 	# print(json_data)
 	# store(json_data)
 	filename = leader+'_'+exp_dt+exp_tm+'_'+exp_op+'.json'
+	dirname = leader+'_'+exp_dt+exp_tm+'_'+exp_op
 	print(filename)
 
 	js = json.dumps(d, sort_keys=False, indent=4, separators=(',', ':'),ensure_ascii=False)
@@ -237,15 +246,17 @@ def getjsonq(request):
 	fp.write(js)
 	fp.close()
 	time.sleep(3)
-	upload(filename)
+	upload(filename,dirname)
 
 	
 
-def upload(name):
+def upload(name,dirname):
 	local_uploadfile="/Users/user/Desktop/company_web/test1/board/jsonfile/"+name
 	sever_will_savefile=name
+
 	bufsize=1024
 
+	ftp_backup_dir=dirname
 
 	socket.setdefaulttimeout(60)  #超時FTP時間設置為60秒
 	ftp = FTP(ftp_server)
