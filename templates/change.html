@@ -152,18 +152,18 @@
                                     {% if messages %}
                                         {% for message in messages %}
                                             <tr class="{% cycle 'active' 'success' 'warning' 'info' %}" id="tr1">
-                                                <td><input type="checkbox" value="1" name="id" />{{ message.id }}</td>
-                                                <td>{{ message.id }}</td>
-                                                <td>{{ message.pltno }}</td>
-                                                <td>{{ message.car_tp }}</td>
-                                                <td>{{ message.vil_dt }}</td>
-                                                <td>{{ message.vil_tm }}</td>
-                                                <td>{{ message.vil_add }}</td>
-                                                <td>{{ message.rule_1 }}</td>
+                                                <td><input type="checkbox"  value="5" name="id"/></td>
+                                                <td name="idd">{{ message.id }}</td>
+                                                <td name="pltno">{{ message.pltno }}</td>
+                                                <td name="car_tp">{{ message.car_tp }}</td>
+                                                <td name="vil_dt">{{ message.vil_dt }}</td>
+                                                <td name="vil_tm">{{ message.vil_tm }}</td>
+                                                <td name="vil_add">{{ message.vil_add }}</td>
+                                                <td name="rule_1">{{ message.rule_1 }}</td>
                                                 <!-- <td>{{ message.vildatetime }}</td> -->
-                                                <td>{{ message.vilinf }}</td>
-                                                <td>1</td>
-                                                <td>{{ message.situa }}</td>
+                                                <td name="vilinf">{{ message.vilinf }}</td>
+                                                <td name="piccnt">1</td>
+                                                <td name="situa">{{ message.situa }}</td>
                                                 <!-- <td><a href = "/static/{{ message.piclink }}">1</a></td> -->
                                                 <td>
                                                     <div class="wrap">
@@ -281,51 +281,38 @@
     </script>
 
     <script>
-        $('.check').click( function() {
-        var checkboxValue= new Array();
-        var checkboxText= new Array();
-	    var checkboxStr=document.getElementsByName("id"); 
-        for(var i=0; i<checkboxStr.length; i++){if(checkboxStr[i].checked){checkboxValue.push(checkboxStr[i].value);checkboxText.push(checkboxStr[i].nextSibling.nodeValue);}} 
-        alert(checkboxText);
-        var data2 = JSON.stringify(checkboxText);
+        // $('.check').click( function() {
+        // var checkboxText= new Array();
+	    // var checkboxStr=document.getElementsByName("id"); 
+        // for(var i=0; i<checkboxStr.length; i++){
+        //     if(checkboxStr[i].checked)
+        //     {checkboxText.push(checkboxStr[i].nextSibling.nodeValue);
+        //     var name = checkboxStr_element[1].value;
+        //     alert(name)
+        //     }
+            
+        //     } 
+        // alert(checkboxText);
+        // var data2 = JSON.stringify(checkboxText);
 
-                    $.ajax({
-                url: "/getid/",
-                type: "post",
-                dataType : 'json',
-                data: {data2,csrfmiddlewaretoken: '{{ csrf_token }}'}
+        //             $.ajax({
+        //         url: "/getid/",
+        //         type: "post",
+        //         dataType : 'json',
+        //         data: {data2,csrfmiddlewaretoken: '{{ csrf_token }}'}
                 // success: function (data) {  
                 //     console.log('ss');
                 // }
-            })
+    //         })
 
-        var $chkBoxes = $('#table01').find('input:checked');
-        var $ids = [];
-        if ($chkBoxes.length == 0) {         //如果不勾选弹出警告框
-      alert('请至少选择一个数据集');
-      return false;
-    }
-    //遍历被选中的checkbox集
-    // $($chkBoxes).each(function () { 
-    //   $ids.push( $(this).attr('td:eq(1)') );   //找到对应checkbox中data-id属性值，然后push给空数组$ids
-    // });
-    // var $ids_str = $ids.join(',');              //将数组转化为用逗号隔开的字符串
-    // //( 还有一种写法：var $ids_str += ','+($ids + '') ) ，Number型加上空字符串''可以将Number转化为字符串
-    // console.log($ids_str);
+    //     var $chkBoxes = $('#table01').find('input:checked');
+    //     var $ids = [];
+    //     if ($chkBoxes.length == 0) {         //如果不勾选弹出警告框
+    //   alert('请至少选择一个数据集');
+    //   return false;
+    // }
 
-        // var $table = $('#table01').find('checked');
-        // var $table = $('#table01');
-        // var table = $table.tableToJSON(
-        //               {
-        //                  ignoreColumns:[0,9,10], 
-        //                 //  headings: ['FirstName', 'LastName', 'Score']
-        //                }); // Convert the table into a javascript object
-        //   console.log(table);
-          
-        //   alert(JSON.stringify(table));
-
-
-        });
+    //     });
 
     </script>
 
@@ -362,20 +349,66 @@
             };
 
 
-            function a2(){
-            //ajax的刪除事件
-            var checkboxValue= new Array();
+
+        //傳id
+        function a2(){
+        
+        var obj = [];
         var checkboxText= new Array();
-	    var checkboxStr=document.getElementsByName("id"); 
-        for(var i=0; i<checkboxStr.length; i++){if(checkboxStr[i].checked){checkboxValue.push(checkboxStr[i].value);checkboxText.push(checkboxStr[i].nextSibling.nodeValue);}} 
-        alert(checkboxText);
+        var Tabobj = $("#Tab");
+        var Check = $("table input[type=checkbox]:checked");//在table中找input下类型为checkbox属性为选中状态的数据
+        Check.each(function () {//遍历
+            var row = $(this).parent("td").parent("tr");//获取选中行
+            var id = row.find("[name='idd']").html();//获取name='Sid'的值
+            checkboxText.push(id);
+            var plt_no =  row.find("[name='pltno']").html();
+            var car_tp =  row.find("[name='car_tp']").html();
+            var vil_dt =  row.find("[name='vil_dt']").html();
+            var vil_tm =  row.find("[name='vil_tm']").html();
+            var vil_add =  row.find("[name='vil_add']").html();
+            var rule_1 =  row.find("[name='rule_1']").html();
+            var vilinf =  row.find("[name='vilinf']").html();
+            var piccnt =  row.find("[name='piccnt']").html();
+            var arr = {
+                'xactno' : id,
+                'plt_no' : plt_no,
+                'car_tp' : car_tp,
+                'vil_dt' : vil_dt,
+                'vil_tm' : vil_tm,
+                'vil_add' : vil_add,
+                'rule_1' : rule_1,
+                'vilinf' : vilinf,
+                'piccnt' : piccnt,
+                }
+            obj.push(arr);
+
+            // dataAll.push(id);dataAll.push(plt_no);dataAll.push(car_tp);dataAll.push(vil_dt);dataAll.push(vil_tm);dataAll.push(vil_add);
+            // dataAll.push(rule_1);dataAll.push(vilinf);dataAll.push(piccnt);
+            // dataAllli.push(dataAll)
+
+
+
+// { "xactno":"26","plt_no":"613-R2","car_tp":"3","vil_dt":"1071005","vil_tm":"1830","vil_add":"ZD02","rule_1":"5610265","vilinf":"","piccnt":"1"},
+        })
+    
+        
+        alert(checkboxText)
+
+        // alert(dataAll)
+        // $("input:checkbox [name = idd]:checked").each(function(){
+        // arr.push($(this).parents('tr').children().eq(1).html());//eq（2）表示checkbox后的第二个<td>
+        // })
+        // alert(arr);
+        // arr.splice(0, arr.length); 
+
+        var dataall = JSON.stringify(obj);
         var data2 = JSON.stringify(checkboxText);
 
                     $.ajax({
                 url: "/getid/",
                 type: "post",
                 dataType : 'json',
-                data: {data2,csrfmiddlewaretoken: '{{ csrf_token }}'},
+                data: {data2,dataall,csrfmiddlewaretoken: '{{ csrf_token }}'},
                 success: function (data2) {  
                     window.location.reload();
                     alert('ok')
