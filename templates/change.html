@@ -7,6 +7,7 @@
 	<title>查詢頁面</title>
     <link href="{% static "js/jquery-ui.css" %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static "css/zoomify.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "css/jkresponsivegallery.css" %}"/>
 
 	<style>
 	body{
@@ -166,9 +167,7 @@
                                                 <!-- <td><a href = "/static/{{ message.piclink }}">1</a></td> -->
                                                 <td>
                                                     <div class="wrap">
-                                                        <img class="zoomify" src="/static/plt/{{ message.piclink }}" width=50 alt="">
-                                                    </div>
-                                                    <div class="wrap">
+                                                            <img class="zoomify" src="/static/plt/{{ message.piclink }}" width=50 alt="">
                                                         <img class="zoomify" src="/static/plt/{{ message.piclink_B }}" width=50 alt="">
                                                     </div>
                                                 </td>
@@ -394,6 +393,10 @@
     function a3(){
         window.location.reload()
     };
+
+    $(function() {
+	$('.rthumbnail').responsivegallery();
+    });
 </script>
 
     <!-- // $(function(){
@@ -436,5 +439,6 @@
     <script type="text/javascript" src="{% static "js/jquery.tabletojson.js" %}"> </script>
     <!-- <script src="{% static "js/jquery.min.js" %}"></script> -->
     <script src="{% static "js/zoomify.min.js" %}"></script>
+    <script src="{% static "js/jkresponsivegallery.js" %}"></script>
   </body>
 </html>
