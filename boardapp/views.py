@@ -288,7 +288,6 @@ def uploadpic(name,dirname,localpath):
 idd = 0
 def getjsonid(request):
 
-	
 	leader = request.session['leader']
 	exp_op = request.session['expop']
 	exp_dt=datetime.datetime.now().strftime('%Y%m%d')
