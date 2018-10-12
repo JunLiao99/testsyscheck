@@ -315,15 +315,18 @@ def getjsonid(request):
 		opentm = case.vildatetime.strftime('%Y%m%d%H%S')  
 		twtm = str(int(opentm)-191100000000) #違規日期
 		add = case.vil_add
-		piclink = case.piclink #要傳去上傳function用
+		piclink = case.piclink #要傳去上傳function用 圖片A
+		piclink_B = case.piclink_B #圖片B
 		#合併成圖片輸出名字
 		# jpgname = str(i)+".txt"
-		jpgname = plt_no+"_"+twtm+"_"+add+"_"+str(idd)+".jpg"
+		jpgname = plt_no+"_"+twtm+"_"+add+"_"+str(0)+".jpg"
+		jpgname_B = plt_no+"_"+twtm+"_"+add+"_"+str(1)+".jpg"
 		print(jpgname)
 		picurl = "/Users/user/Desktop/company_web/test1/board/static/plt/"+piclink
-
-
+		picurl_B = "/Users/user/Desktop/company_web/test1/board/static/plt/"+piclink_B
 		uploadpic(jpgname,dirname,picurl)
+		uploadpic(jpgname_B,dirname,picurl_B)
+
 
 		# case.delete()
 

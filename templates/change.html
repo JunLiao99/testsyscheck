@@ -164,9 +164,14 @@
                                                 <td>1</td>
                                                 <td>{{ message.situa }}</td>
                                                 <!-- <td><a href = "/static/{{ message.piclink }}">1</a></td> -->
-                                                <td><div class="wrap">
+                                                <td>
+                                                    <div class="wrap">
                                                         <img class="zoomify" src="/static/plt/{{ message.piclink }}" width=50 alt="">
-                                                    </div></td>
+                                                    </div>
+                                                    <div class="wrap">
+                                                        <img class="zoomify" src="/static/plt/{{ message.piclink_B }}" width=50 alt="">
+                                                    </div>
+                                                </td>
                                                 <td><a class="modify" href="javascript:;">修改</a></td>
                                             </tr>
                                         {% endfor %}
