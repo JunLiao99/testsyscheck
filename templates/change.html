@@ -326,16 +326,39 @@
             data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
           });
 
-         function a1() {
-            // var $table = $('#table01').prop('checked');
-            var $table = $('#table01');
-            var table = $table.tableToJSON(
-                      {
-                         ignoreColumns:[0,10,11,12], 
-                        //  headings: ['FirstName', 'LastName', 'Score']
-                       }); // Convert the table into a javascript object
-            console.log('ss')
-            var data1=JSON.stringify(table);
+        function a1() {
+
+        var obj = [];
+        var checkboxText= new Array();
+        var Tabobj = $("#Tab");
+        var Check = $("table input[type=checkbox]:checked");//在table中找input下类型为checkbox属性为选中状态的数据
+        Check.each(function () {//遍历
+            var row = $(this).parent("td").parent("tr");//获取选中行
+            var id = row.find("[name='idd']").html();//获取name='Sid'的值
+            checkboxText.push(id);
+            var plt_no =  row.find("[name='pltno']").html();
+            var car_tp =  row.find("[name='car_tp']").html();
+            var vil_dt =  row.find("[name='vil_dt']").html();
+            var vil_tm =  row.find("[name='vil_tm']").html();
+            var vil_add =  row.find("[name='vil_add']").html();
+            var rule_1 =  row.find("[name='rule_1']").html();
+            var vilinf =  row.find("[name='vilinf']").html();
+            var piccnt =  row.find("[name='piccnt']").html();
+            var arr = {
+                'xactno' : id,
+                'plt_no' : plt_no,
+                'car_tp' : car_tp,
+                'vil_dt' : vil_dt,
+                'vil_tm' : vil_tm,
+                'vil_add' : vil_add,
+                'rule_1' : rule_1,
+                'vilinf' : vilinf,
+                'piccnt' : piccnt,
+                }
+            obj.push(arr);
+
+        })
+            var data1=JSON.stringify(obj);
         // 觸發ajax事件
             $.ajax({
                 url: "/getq/",
@@ -343,8 +366,7 @@
                 dataType : 'json',
                 data: {data1,csrfmiddlewaretoken: '{{ csrf_token }}'}
                 // success: function (data) {  
-                //     console.log('ss');
-                // }
+
             })
             };
 
@@ -382,13 +404,6 @@
                 }
             obj.push(arr);
 
-            // dataAll.push(id);dataAll.push(plt_no);dataAll.push(car_tp);dataAll.push(vil_dt);dataAll.push(vil_tm);dataAll.push(vil_add);
-            // dataAll.push(rule_1);dataAll.push(vilinf);dataAll.push(piccnt);
-            // dataAllli.push(dataAll)
-
-
-
-// { "xactno":"26","plt_no":"613-R2","car_tp":"3","vil_dt":"1071005","vil_tm":"1830","vil_add":"ZD02","rule_1":"5610265","vilinf":"","piccnt":"1"},
         })
     
         
@@ -401,14 +416,14 @@
         // alert(arr);
         // arr.splice(0, arr.length); 
 
-        var dataall = JSON.stringify(obj);
+
         var data2 = JSON.stringify(checkboxText);
 
                     $.ajax({
                 url: "/getid/",
                 type: "post",
                 dataType : 'json',
-                data: {data2,dataall,csrfmiddlewaretoken: '{{ csrf_token }}'},
+                data: {data2,csrfmiddlewaretoken: '{{ csrf_token }}'},
                 success: function (data2) {  
                     window.location.reload();
                     alert('ok')
