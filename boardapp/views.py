@@ -320,7 +320,7 @@ def getjsonid(request):
 		# jpgname = str(i)+".txt"
 		jpgname = plt_no+"_"+twtm+"_"+add+"_"+str(idd)+".jpg"
 		print(jpgname)
-		picurl = "/Users/user/Desktop/company_web/test1/board/static/"+piclink
+		picurl = "/Users/user/Desktop/company_web/test1/board/static/plt/"+piclink
 
 
 		uploadpic(jpgname,dirname,picurl)
