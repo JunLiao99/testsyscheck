@@ -27,7 +27,7 @@ class history(models.Model):
     piclink = models.TextField(blank=True, default='')
     expop = models.CharField(max_length=200, null=False)
     leader = models.CharField(max_length=100, default='m', null=False)
-
+    piclink_B = models.TextField(blank=True, default='')
 
 class caselist(models.Model):
     xactno = models.CharField(max_length=200, null=False)
@@ -94,7 +94,7 @@ class check:
     def insert(self,id):
         cnxn = pyodbc.connect(r'Driver={SQL Server};Server=.\SQLEXPRESS;Database=testDB;UID=sa;PWD=80689233;')
         cursor = cnxn.cursor()
-        cursor.execute("INSERT INTO boardapp_history (id, xactno, pltno, car_tp, vil_dt, vil_tm, vil_add, rule_1, vildatetime, vilinf, situa, piclink) SELECT id, xactno, pltno, car_tp, vil_dt, vil_tm, vil_add, rule_1, vildatetime, vilinf, situa, piclink FROM boardapp_caselist WHERE id = '"+id+"'" )
+        cursor.execute("INSERT INTO boardapp_history (id, xactno, pltno, car_tp, vil_dt, vil_tm, vil_add, rule_1, vildatetime, vilinf, situa, piclink,piclink_B) SELECT id, xactno, pltno, car_tp, vil_dt, vil_tm, vil_add, rule_1, vildatetime, vilinf, situa, piclink, piclink_B FROM boardapp_caselist WHERE id = '"+id+"'" )
         cnxn.commit()
 
     def insertexpop(self,id,expop):

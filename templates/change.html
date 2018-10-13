@@ -91,17 +91,23 @@
         <div class="container">
                 <div class="row">
                 <a style="font-size:0.8cm;" href="/index/" >首頁</a>
+
+            <form method="POST" id="myform">
+                    {% csrf_token %}
                 <div class="col-sm-1">
-                        <button type="button" class="btn btn-outline-dark">查詢</button>
+                        <button type="submit" class="btn btn-outline-dark">查詢</button>
                 </div>
-                  <div class="col-sm">
-                    <p>開始日期：<input type="text" id="datepicker"></p>
+                  <div class="col-sm" class="form-group">
+                    <label for="inputAddress">開始日期：</label>
+                    <input type="text" class="form-control" id="datepicker" name="datepicker">
                   </div>
 
-                  <div class="col-sm">
-                        <p>結束日期：<input type="text" id="datepickerend"></p>
+                  <div class="col-sm" class="form-group">
+                        <label for="inputAddress2">結束日期：</label>
+                        <input type="text" class="form-control" id="datepickerend" name="datepickerend">
                   </div>
-
+                </form>
+                
                   <div class="col-sm">
                         <div class="row-6">
                             <H3 style="margin-left:90px">舉發單位: {{leader }} </H3> 
@@ -119,19 +125,19 @@
               {% endblock %}
               <div class="container" style="margin-top:50px">
                     <div class="row">
-                      <div class="col-sm-8">
+                      <div class="col-sm-9">
                             <table border="1px" table id="table01">
                                 <tr>
-                                    <th>勾選可開單</th>
-                                    <th>xactno</th>
-                                    <th>plt_no</th>
-                                    <th>car_tp</th>
-                                    <th>vil_dt</th>
-                                    <th>vil_tm</th>
-                                    <th>vil_add</th>
-                                    <th>rule_1</th>
-                                    <th>vilinf</th>
-                                    <th>piccnt</th>
+                                    <th>勾選可送出</th>
+                                    <th>流水號</th>
+                                    <th>車牌</th>
+                                    <th>車型</th>
+                                    <th>年月日</th>
+                                    <th>時分</th>
+                                    <th>地點代碼</th>
+                                    <th>規則代碼</th>
+                                    <th>中文備註</th>
+                                    <th>圖片數量</th>
                                     <th>處理狀態</th>
                                     <th>車牌圖片</th>
                                     <th>修正動作</th>
@@ -155,14 +161,33 @@
                                                 <td><input type="checkbox"  value="5" name="id"/></td>
                                                 <td name="idd">{{ message.id }}</td>
                                                 <td name="pltno">{{ message.pltno }}</td>
-                                                <td name="car_tp">{{ message.car_tp }}</td>
+                                                <td name="car_tp">                                                    
+                                                        <select id="cartp" >
+                                                            <option value="1" selected>汽車</option>
+                                                            <option value="2">拖車</option>
+                                                            <option value="3">重型機車</option>
+                                                            <option value="4">輕型機車</option>
+                                                            <option value="5">動力機械</option>
+                                                            <option value="6">汽車臨時牌</option>
+                                                            <option value="7">試車牌</option>
+                                                            <option value="B">領</option>
+                                                            <option value="C">外</option> 
+                                                            <option value="D">使</option>
+                                                            <option value="E">機車臨時牌</option>                              
+                                                        </select></td>
                                                 <td name="vil_dt">{{ message.vil_dt }}</td>
                                                 <td name="vil_tm">{{ message.vil_tm }}</td>
                                                 <td name="vil_add">{{ message.vil_add }}</td>
                                                 <td name="rule_1">{{ message.rule_1 }}</td>
                                                 <!-- <td>{{ message.vildatetime }}</td> -->
-                                                <td name="vilinf">{{ message.vilinf }}</td>
-                                                <td name="piccnt">1</td>
+                                                <td name="vilinf">
+                                                    <select name="vilinf" >
+                                                    <option value="1" selected >可開單</option>
+                                                    <option value="2">無法辨識</option>
+                                                    <option value="3">車牌塗汙</option>
+                                                    </select>
+                                                                                    </td>
+                                                <td name="piccnt">2</td>
                                                 <td name="situa">{{ message.situa }}</td>
                                                 <!-- <td><a href = "/static/{{ message.piclink }}">1</a></td> -->
                                                 <td>
@@ -243,7 +268,7 @@
 		$(".modify").click(function(){
             str = $(this).text()=="修改"?"确定":"修改"; 
             $(this).text(str);
-			$(this).parent().siblings("td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7),td:eq(8)").each(function()//找同类元素td
+			$(this).parent().siblings("td:eq(2),td:eq(4),td:eq(5),td:eq(6),td:eq(7)").each(function()//找同类元素td
 			{
 				var is_text = $(this).find("input:text");//判断单元格下是否含有文本框
 				if (!is_text.length) {
@@ -336,13 +361,18 @@
             var row = $(this).parent("td").parent("tr");//获取选中行
             var id = row.find("[name='idd']").html();//获取name='Sid'的值
             checkboxText.push(id);
+            
+            // console.log(myselect)
+            // alert(myselect)
             var plt_no =  row.find("[name='pltno']").html();
-            var car_tp =  row.find("[name='car_tp']").html();
+            var car_tp=row.find("option:selected").val();
+            // var car_tp =  row.find("[name='car_tp']").html();
             var vil_dt =  row.find("[name='vil_dt']").html();
             var vil_tm =  row.find("[name='vil_tm']").html();
             var vil_add =  row.find("[name='vil_add']").html();
             var rule_1 =  row.find("[name='rule_1']").html();
-            var vilinf =  row.find("[name='vilinf']").html();
+            var vilinf =  row.find("[name='vilinf'] option:selected").html();
+            alert(vilinf)
             var piccnt =  row.find("[name='piccnt']").html();
             var arr = {
                 'xactno' : id,
@@ -383,6 +413,8 @@
             var row = $(this).parent("td").parent("tr");//获取选中行
             var id = row.find("[name='idd']").html();//获取name='Sid'的值
             checkboxText.push(id);
+            var myselect=document.getElementById("test");
+
             var plt_no =  row.find("[name='pltno']").html();
             var car_tp =  row.find("[name='car_tp']").html();
             var vil_dt =  row.find("[name='vil_dt']").html();

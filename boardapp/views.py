@@ -16,7 +16,7 @@ import time
 ##192.168.1.163 公司網路
 ##172.20.10.6 手機網路
 
-ftp_server='192.168.1.163'
+ftp_server='192.168.1.4'
 ftp_user='test_1'
 ftp_password='aa123456'
 
@@ -120,11 +120,34 @@ def logout(request):  #登出
 	return redirect('/login/')
 
 def change(request): #管理新增資料
+	    #POST
+	if request.method == "POST" :
+		print('GET POST ======================')
+		messages =  models.caselist.objects.all().order_by('-id')
+		limit = 10
+		paginator = Paginator(messages, limit)  #按每页10条分页
+		page = request.GET.get('page','1')  #默认跳转到第一页
+
+		result = paginator.page(page)
+
+		name = request.session['name']
+		CNname = request.session['CNname']
+		leader = request.session['leader']
+		expop = request.session['expop']
+		#取得表單透過POST傳過來的資料
+		begin = request.POST['datepicker']
+		over = request.POST['datepickerend']
+		print(begin,over)
+
+		# UnitCost = request.POST['UnitCost']
+		return render(request, "change.html", {'messages' : result,'name': name,'leader': leader,'CNname': CNname,'expop': expop},locals())
+
 	messages =  models.caselist.objects.all().order_by('-id')  #获取全部数据
 	# messages =  models.caselist.objects.filter(situa='未處理').order_by('-id')  #获取全部数据
 	limit = 10
 	paginator = Paginator(messages, limit)  #按每页10条分页
 	page = request.GET.get('page','1')  #默认跳转到第一页
+
 
 	result = paginator.page(page)
 
